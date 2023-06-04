@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { lazy, Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Layout from "./components/Layout/Layout";
+
+import routes from "./routes";
+
+// pages
+
+const AuthPage = lazy(() => import("./pages/AuthPage/AuthPage" /* webpackChunkName: "AuthPage" */));
+const ChatPage = lazy(() => import("./pages/ChatPage/ChatPage" /* webpackChunkName: "ChatPage" */));
+
+export default function App() {
+    return (
+        <Suspense fallback={<p>Загружаем...</p>}>
+            <Routes>
+                <Route path={routes.auth} element={<Layout />}>
+                    <Route path={routes.auth} element={<AuthPage />} />
+                    <Route path={routes.chat} element={<ChatPage />} />
+                </Route>
+            </Routes>
+        </Suspense>
+    );
 }
-
-export default App;
